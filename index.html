@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  background: #0a0a1a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+}
+canvas { 
+  background: radial-gradient(#1a1a2e, #0a0a1a);
+}
+.texto {
+  position: absolute;
+  bottom: 40px;
+  color: #7ec8e3;
+  font-size: 24px;
+  text-align: center;
+  opacity: 0;
+  animation: aparecer 2s ease-in 4s forwards;
+  text-shadow: 0 0 10px #3b82f6;
+}
+@keyframes aparecer {
+  to { opacity: 1; }
+}
+.nombre {
+  font-size: 32px;
+  font-weight: bold;
+  color: #60a5fa;
+}
+</style>
+</head>
+<body>
+<canvas id="tulipanes" width="400" height="600"></canvas>
+<div class="texto">
+  <div class="nombre">Larissa</div>
+  te hice esto para que me perdones 💙
+</div>
+
+<script>
+const canvas = document.getElementById('tulipanes');
+const ctx = canvas.getContext('2d');
+
+// Colores
+const azulTulipan = '#3b82f6';
+const azulClaro = '#60a5fa';
+const verdeTallo = '#22c55e';
+const verdeHoja = '#16a34a';
+
+// Función pa' dibujar un tulipán
+function crearTulipan(x, y, delay) {
+  setTimeout(() => {
+    // Tallo que crece
+    let alturaTallo = 0;
+    let crecerTallo = setInterval(() => {
+      ctx.strokeStyle = verdeTallo;
+      ctx.lineWidth = 6;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(x, y + 150);
+      ctx.lineTo(x, y + 150 - alturaTallo);
+      ctx.stroke();
+      alturaTallo += 5;
+      if (alturaTallo >= 150) {
+        clearInterval(crecerTallo);
+        dibujarPetalo(x, y);
+      }
+    }, 20);
+  }, delay);
+}
+
+function dibujarPetalo(x, y) {
+  // Pétalo central
+  ctx.fillStyle = azulTulipan;
+  ctx.beginPath();
+  ctx.ellipse(x, y, 15, 40, 0, 0, Math.PI * 2);
+  ctx.fill();
+  
+  // Pétalos laterales
+  setTimeout(() => {
+    ctx.fillStyle = azulClaro;
+    ctx.beginPath();
+    ctx.ellipse(x-12, y+5, 12, 35, -0.3, 0, Math.PI * 2);
+    ctx.fill();
+  }, 300);
+  
+  setTimeout(() => {
+    ctx.beginPath();
+    ctx.ellipse(x+12, y+5, 12, 35, 0.3, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Hojas
+    ctx.fillStyle = verdeHoja;
+    ctx.beginPath();
+    ctx.ellipse(x-20, y+80, 15, 30, -0.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(x+20, y+100, 15, 30, 0.5, 0, Math.PI * 2);
+    ctx.fill();
+  }, 600);
+}
+
+// Crear 3 tulipanes con delay
+crearTulipan(100, 200, 500);
+crearTulipan(200, 180, 2000);
+crearTulipan(300, 210, 3500);
+</script>
+</body>
+</html>
